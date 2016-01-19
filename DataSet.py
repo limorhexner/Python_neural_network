@@ -17,10 +17,9 @@ class dataSet:
 		self.X = readCsv(inFile)
 		
 	def readOutput(self,inFile):
-		self.y = readCsv(inFile)
+		self.y = readCsv(inFile).transpose();
 
 	def displayInput(self,nDisp,isRand):
-		import random
 		#display nDisp samples from input in a grid.
 		X = self.X
 		if isRand:
