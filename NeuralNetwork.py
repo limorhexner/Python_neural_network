@@ -1,5 +1,6 @@
 import numpy as np
 import random
+from DataSet import dataSet, readCsv
 
 class neuralNetwork:
 #this class is a neural network representation
@@ -18,6 +19,9 @@ class neuralNetwork:
 		#manually set network parameters
 		#does not validate size
 		self.theta = thetaVec;
+	def readNetworkParams(self,csvFile)
+		#read network parameters from csv file
+		self.theta = csvRead(csvFile)
 	
 	def learnNetwork(self,ds):
 		#learn network parameters from training data set
@@ -37,7 +41,7 @@ class neuralNetwork:
 		nParameters = (inSize+1)*self.hiddenLayerSize + (self.hiddenLayerSize+1)*outSize;
 		#randomly initiate parameters
 		self.theta = randInitializeWeights(nParameters)
-		
+		#TODO- get lable vec from np.unique(outVec.tolist())
 		
 
 		self.inSize = inSize; #save for future validation

@@ -9,7 +9,7 @@ from DataSet import dataSet, readCsv
 import myMath as mm
 from  LearnAlg import costFunction
 
-#os.chdir('C:\\Users\\Limor_2\\Documents\\C:\\Users\\Limor_2\\Documents\\GitHub\\Python_neural_network')
+# os.chdir('C:\Users\Limor_2\Documents\GitHub\Python_neural_network')
 #import learn_nural_network as lnn
 #reload(lnn)
 #import sys
@@ -22,8 +22,9 @@ def tesetCostFun():
 	ds.runPca();
 	thetaInint = readCsv('theta.csv')
 	
-	J = costFunction(thetaInint,ds.Z,ds.y,25,0.1)
+	J ,grad= costFunction(thetaInint,ds.Z,ds.y,25,0.1)
 	print J
+	return grad
 	
 	
 

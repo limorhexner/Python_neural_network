@@ -2,20 +2,21 @@ import DisplayData as dd
 import numpy as np
 import random
 
-class dataSet:
 
+class dataSet:
+	#dataSet object contains all information regarding the data set
 	def __init__(self):
 		#initiate dataset
 		self.X=[]
 		self.y=[]
 		self.pcaExist = False
+		#default parameters for PCA and dispay
 		self.pEn = 99.0
 		self.nSamplesPlot = 20
 		self.nEvPlot = 15
-		
+	#data read:
 	def readInput(self,inFile):
-		self.X = readCsv(inFile)
-		
+		self.X = readCsv(inFile)		
 	def readOutput(self,inFile):
 		self.y = readCsv(inFile).transpose();
 
@@ -30,6 +31,17 @@ class dataSet:
 		f.suptitle('input samples')
 		self.inFig = f
 		
+	def runPca(self):
+		#perform Principal component analysis
+		if len(self.X)==0:
+			print 'dataSet object have no data, use ds.readInput'
+			return
+		#make sur pEn is float
+		if type(self.pEn) is not float:	
+			self.pEn = float(self.pEn)
+		self.U, self.nd = PCA(self.X,self.pEn)
+		self.Z= self.X*self.U
+		self.pcaExist = True		
 		
 	def displayPca(self,inds):
 		#display PCA largest ingradients of selectes sumples
@@ -60,16 +72,7 @@ class dataSet:
 		self.pcaFig = f		
 			
 		
-	def runPca(self):
-		if len(self.X)==0:
-			print 'dataSet object have no data, use ds.readInput'
-			return
-		#make sur pEn is float
-		if type(self.pEn) is not float:	
-			self.pEn = float(self.pEn)
-		self.U, self.nd = PCA(self.X,self.pEn)
-		self.Z= self.X*self.U
-		self.pcaExist = True
+
 		
 	
 def PCA(inMat,pEn):
