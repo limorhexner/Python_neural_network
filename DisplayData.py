@@ -51,6 +51,9 @@ def list2mat(inList,row,col):
 def stackImages(inList,nRows,nCols,ll):
 	#reshape each line
 	ii = [list2mat(inList[i],ll,ll) for i in range(len(inList))] ## array of matrices
+	#append with zeros
+	for k in range(len(ii),nRows*nCols):
+		ii.append(np.zeros((ll,ll)))
 	#stack all matrices
 	jj= np.vstack([np.hstack(ii[i*nCols:(i+1)*nCols]) for i in range(nRows)])
 	return jj

@@ -26,7 +26,7 @@ class dataSet:
 		if isRand:
 			XX = random.sample(np.matrix.tolist(X),nDisp)
 		else:
-			XX = X[0:nDisp]
+			XX = X[:nDisp]
 		f = dd.displayData(XX,[],[])
 		f.suptitle('input samples')
 		self.inFig = f

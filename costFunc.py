@@ -19,19 +19,10 @@ def costFunction(nnParams,inMat,outVec,lables,hiddenLayerSize,cLambda):
 	#input size validation
 	if len(outVec)!= nSamples:
 		print 'wrong output length'		
-		return -1 ,-1
+		return -1 ,-1,-1,-1
 		
-	#reshape parameters into matrixes
-	l1 = hiddenLayerSize*(inSize+1)
-	l2 = (hiddenLayerSize+1)*outSize
-	if (len(nnParams)!=l1+l2):
-		print 'wrong length of nnParams'
-		print 'l1=',l1,' l2 =',l2
-		print 'nnParams length=' ,len(nnParams)
-		return -1 ,-1
-	theta1 = nnParams[0:l1].reshape(inSize+1,hiddenLayerSize)
-	theta2 = nnParams[l1:(l1+l2)].reshape(hiddenLayerSize+1,outSize)
-	
+	theta1,theta2,l1,l2 = arrangeParams(nnParams,inSize,outSize,hiddenLayerSize)	
+		
 	#===Part 1: Feedforward the neural network and return the cost===
 	#add bias parameter
 	a1 = np.hstack((np.ones((nSamples,1)),inMat)) 
@@ -47,7 +38,7 @@ def costFunction(nnParams,inMat,outVec,lables,hiddenLayerSize,cLambda):
 	#calculate cost
 	#true out matrix
 	yMat = np.zeros((nSamples,outSize));
-	tmp = [yMat.itemset((i,outVec[i]-1),1) for i in range(nSamples)];#(tmp is to supress print)
+	tmp = [yMat.itemset((i,outVec[i]),1) for i in range(nSamples)];#(tmp is to supress print)
 	#cost = -y*log(hTheta) - (1-y)*log(1-hTeta)
 	tmp = -np.multiply(yMat,np.log(hTheta)) #first part
 	tmp -= np.multiply(1-yMat,np.log(1-hTheta))#second part
@@ -88,3 +79,16 @@ def sigmoidGradient(z):
 	#the gradient of the sigmoid function
 	sigz=sigmoid(z);
 	return np.multiply(sigz,(1-sigz));
+	
+def arrangeParams(nnParams,inSize,outSize,hiddenLayerSize):
+	#reshape parameters into matrixes
+	l1 = hiddenLayerSize*(inSize+1)
+	l2 = (hiddenLayerSize+1)*outSize
+	if (len(nnParams)!=l1+l2):
+		print 'wrong length of nnParams'
+		print 'l1=',l1,' l2 =',l2
+		print 'nnParams length=' ,len(nnParams)
+		return -1 ,-1,-1,-1
+	theta1 = nnParams[0:l1].reshape(inSize+1,hiddenLayerSize)
+	theta2 = nnParams[l1:(l1+l2)].reshape(hiddenLayerSize+1,outSize)
+	return theta1,theta2,l1,l2
