@@ -1,6 +1,7 @@
 import numpy as np
 import random
 from DataSet import dataSet, readCsv
+from gradDescent import gradientDescent
 
 class neuralNetwork:
 #this class is a neural network representation
@@ -14,14 +15,16 @@ class neuralNetwork:
 		#initiate network- no weights
 		theta  = [];
 		self.hiddenLayerSize = hiddenLayerSize;
+		self.nIteration = 40;
 	
 	def setNetworkParameters(self,thetaVec):
 		#manually set network parameters
 		#does not validate size
 		self.theta = thetaVec;
-	def readNetworkParams(self,csvFile)
+		
+	def readNetworkParams(self,csvFile):
 		#read network parameters from csv file
-		self.theta = csvRead(csvFile)
+		self.theta = readCsv(csvFile)
 	
 	def learnNetwork(self,ds):
 		#learn network parameters from training data set
@@ -36,15 +39,9 @@ class neuralNetwork:
 			self.U = ds.U; #save for future validation
 		else:
 			inSet = ds.X;
-		nSamples, inSize = inSet.shape;
-		outSize=len(np.unique(np.matrix.tolist(ds.y)));
-		nParameters = (inSize+1)*self.hiddenLayerSize + (self.hiddenLayerSize+1)*outSize;
-		#randomly initiate parameters
-		self.theta = randInitializeWeights(nParameters)
-		#TODO- get lable vec from np.unique(outVec.tolist())
 		
+		self.theta,self.labels,self.inSize = nnTrain(inSet,ds.y,self.hiddenLayerSize,self.nIteration)
 
-		self.inSize = inSize; #save for future validation
 
 	def predict(self,X):
 		#validate size of theta
@@ -54,7 +51,17 @@ class neuralNetwork:
 			print 'neural network not initialised'
 			return -1
 		
-
+#private functions
+def nnTrain(inSet,outVec,hiddenLayerSize,nIteration):
+	#train nueral network
+	nSamples, inSize = inSet.shape;
+	outSize=len(np.unique(np.matrix.tolist(outVec)));
+	nParameters = (inSize+1)*hiddenLayerSize + (hiddenLayerSize+1)*outSize;
+	validationSize = 0;
+	#randomly initiate parameters
+	initParams = randInitializeWeights(nParameters)
+	theta,labels,j1,j2 = gradientDescent(inSet,outVec,initParams,hiddenLayerSize,nIteration,validationSize)
+	return theta,labels,inSize
 
 def randInitializeWeights(nParameters):
 	#randomly initiate weights matrix mXn
@@ -62,4 +69,3 @@ def randInitializeWeights(nParameters):
 	W = np.random.random((nParameters,1))* 2 * epsilonInit - epsilonInit;
 	return W
 	
-def 

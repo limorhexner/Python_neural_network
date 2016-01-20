@@ -1,7 +1,6 @@
-#all learning algorithm functions
 import numpy as np
 
-def costFunction(nnParams,inMat,outVec,hiddenLayerSize,cLambda):
+def costFunction(nnParams,inMat,outVec,lables,hiddenLayerSize,cLambda):
 	#===========================================================
 	#calculate cost function and gradient for input parameters
 	#input: 
@@ -16,17 +15,19 @@ def costFunction(nnParams,inMat,outVec,hiddenLayerSize,cLambda):
 	#===========================================================
 	
 	nSamples, inSize = inMat.shape
-	outSize  = len(np.unique(outVec.tolist()))
+	outSize  = len(lables)
 	#input size validation
-	if len(outVec)!= nSample:
-		print 'wrong output length'
+	if len(outVec)!= nSamples:
+		print 'wrong output length'		
 		return -1 ,-1
 		
 	#reshape parameters into matrixes
 	l1 = hiddenLayerSize*(inSize+1)
 	l2 = (hiddenLayerSize+1)*outSize
 	if (len(nnParams)!=l1+l2):
-		print 'wrong length of nnParams'		
+		print 'wrong length of nnParams'
+		print 'l1=',l1,' l2 =',l2
+		print 'nnParams length=' ,len(nnParams)
 		return -1 ,-1
 	theta1 = nnParams[0:l1].reshape(inSize+1,hiddenLayerSize)
 	theta2 = nnParams[l1:(l1+l2)].reshape(hiddenLayerSize+1,outSize)
